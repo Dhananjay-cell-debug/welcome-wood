@@ -141,9 +141,14 @@ export default function Footer() {
             <span className="text-cream/45 text-[10px] tracking-wide3">
               © {new Date().getFullYear()} WELCOME WOODS
             </span>
-            <span className="text-cream/45 text-[10px] tracking-wide3">
-              CONCEPT PRESENTATION · PLACEHOLDER CONTENT
-            </span>
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 sm:text-right">
+              <span className="text-cream/45 text-[10px] tracking-wide3">
+                CONCEPT PRESENTATION · PLACEHOLDER CONTENT
+              </span>
+              <span className="text-cream/35 text-[10px] tracking-wide3">
+                MUSIC — "GYMNOPÉDIE NO. 1" BY KEVIN MACLEOD, CC BY 4.0
+              </span>
+            </div>
           </div>
         </div>
       </div>

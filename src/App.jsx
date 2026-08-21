@@ -14,6 +14,7 @@ import Veil from './components/Veil'
 import MenuOverlay from './components/MenuOverlay'
 import HairlineFrame from './components/HairlineFrame'
 import CoutureCursor from './components/CoutureCursor'
+import MusicPlayer from './components/MusicPlayer'
 import useSmoothScroll, { getLenis } from './lib/useSmoothScroll'
 
 /* Decoded before the veil parts — this is what prevents any pop-in. */
@@ -120,6 +121,8 @@ export default function App() {
       <MenuOverlay open={menuOpen} onClose={closeMenu} />
 
       <HairlineFrame revealed={introDone} />
+
+      <MusicPlayer revealed={introDone} menuOpen={menuOpen} />
 
       <Veil revealed={revealed} navMarkRef={navMarkRef} onFinished={onIntroFinished} />
 
