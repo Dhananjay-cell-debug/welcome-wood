@@ -1,0 +1,310 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   WELCOME WOODS — foundation
+   Every animated property here is transform / opacity / clip-path.
+   Nothing in this file can trigger layout reflow.
+   ============================================================ */
+
+@layer base {
+  :root {
+    --frame-inset: 26px;
+    --ease-couture: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @media (max-width: 767px) {
+    :root {
+      --frame-inset: 14px;
+    }
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Lenis requirements. Native smooth-scroll must be off or the two
+     smoothing systems fight each other on anchor jumps. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    margin: 0;
+    background-color: #EDE8D0; /* cream — never white */
+    color: #1c1510;
+    font-family: 'Jost', system-ui, sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* The bespoke cursor replaces the system one on precise pointers only. */
+  @media (hover: hover) and (pointer: fine) {
+    body.has-couture-cursor,
+    body.has-couture-cursor * {
+      cursor: none;
+    }
+  }
+
+  ::selection {
+    background: #c6b094;
+    color: #2e241c;
+  }
+}
+
+@layer components {
+  /* ---- Film grain -------------------------------------------------
+     Static SVG turbulence. Painted once, composited — costs nothing
+     per frame, unlike a canvas noise loop.                          */
+  /* ---- Paper grain ------------------------------------------------
+     Deliberately plain: no blend mode, no animation, no will-change.
+
+     This previously ran `mix-blend-mode: multiply` on a fixed layer twice
+     the size of the viewport, drifting on an infinite animation. A blend
+     mode forces the compositor to flatten everything underneath it into a
+     single raster on every frame — tolerable over flat colour, ruinous once
+     the page is full of full-bleed photographs, and it locked the renderer
+     solid. A static tint at low opacity gives the same paper feel for free. */
+  .grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 60;
+    opacity: 0.055;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---- Breathing vignette ---------------------------------------- */
+  .vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 20;
+    background:
+      radial-gradient(
+        ellipse 120% 85% at 50% 45%,
+        transparent 38%,
+        rgba(137, 81, 41, 0.34) 100%
+      );
+    animation: vignette-breathe 14s ease-in-out infinite;
+  }
+
+  /* ---- Text mask: the film-titling reveal ------------------------- */
+  .mask-line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em; /* room for descenders inside the mask */
+  }
+
+  /* Deliberately does NOT set `display`. An element+class selector outranks a
+     Tailwind utility class, so declaring display here would silently override
+     `flex`/`grid` on any masked child. Each child states its own display. */
+  .mask-line > * {
+    will-change: transform, opacity;
+  }
+
+  /* ---- Couture hairline frame ------------------------------------ */
+  .frame-edge {
+    position: fixed;
+    background: rgba(226, 218, 190, 0.42);
+    pointer-events: none;
+    z-index: 45;
+  }
+
+  /* ---- Magnetic cursor -------------------------------------------
+     No blend mode. `mix-blend-mode: difference` on a fixed element that
+     moves with the pointer is the single most expensive thing that was on
+     this page: the compositor had to re-flatten the entire document beneath
+     it on every pointer frame, and with a 15,000px page of full-bleed
+     photography it locked the renderer.
+
+     Legibility on both beige and photography is handled instead by pairing a
+     light stroke with a dark halo — readable either way, and free. */
+  .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    border: 1px solid rgba(245, 242, 230, 0.85);
+    box-shadow:
+      0 0 0 1px rgba(137, 81, 41, 0.28),
+      inset 0 0 0 1px rgba(137, 81, 41, 0.18);
+    border-radius: 9999px;
+    pointer-events: none;
+    z-index: 90;
+    will-change: transform;
+  }
+
+  .cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    margin: -2.5px 0 0 -2.5px;
+    background: #f5f2e6;
+    box-shadow: 0 0 0 1px rgba(137, 81, 41, 0.45);
+    border-radius: 9999px;
+    pointer-events: none;
+    z-index: 91;
+    will-change: transform;
+  }
+
+  /* ---- Slide layers ---------------------------------------------- */
+  .slide-layer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    clip-path: inset(0 0 0 0);
+  }
+
+  .slide-layer img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform-origin: 50% 55%;
+  }
+
+  /* The luminous edge that travels with the wipe. */
+  .wipe-seam {
+    position: absolute;
+    top: -10%;
+    bottom: -10%;
+    width: 2px;
+    z-index: 12;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(237, 232, 208, 0.9) 22%,
+      rgba(210, 200, 162, 1) 50%,
+      rgba(237, 232, 208, 0.9) 78%,
+      transparent
+    );
+    box-shadow:
+      0 0 22px 4px rgba(210, 200, 162, 0.55),
+      0 0 60px 12px rgba(169, 114, 71, 0.28);
+    will-change: transform, opacity;
+  }
+
+  /* ---- Index rail progress --------------------------------------- */
+  .rail-track {
+    position: relative;
+    height: 1px;
+    background: rgba(237, 232, 208, 0.24);
+    overflow: hidden;
+  }
+
+  .rail-fill {
+    position: absolute;
+    inset: 0;
+    background: rgba(237, 232, 208, 0.85);
+    transform: scaleX(0);
+    transform-origin: left center;
+    will-change: transform;
+  }
+
+  /* ---- Scroll cue ------------------------------------------------- */
+  .cue-track {
+    position: relative;
+    width: 1px;
+    height: 64px;
+    background: rgba(237, 232, 208, 0.22);
+    overflow: hidden;
+  }
+
+  .cue-dot {
+    position: absolute;
+    left: -1px;
+    top: 0;
+    width: 3px;
+    height: 18px;
+    background: rgba(237, 232, 208, 0.9);
+    animation: cue-travel 2.6s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+  }
+
+  /* ---- Veil ------------------------------------------------------- */
+  .veil-band {
+    background: #EDE8D0;
+    will-change: transform;
+  }
+}
+
+/* ============================================================
+   Keyframes — all composited
+   ============================================================ */
+
+@keyframes grain-drift {
+  0%   { transform: translate3d(0, 0, 0); }
+  16%  { transform: translate3d(-3%, 2%, 0); }
+  33%  { transform: translate3d(2%, -3%, 0); }
+  50%  { transform: translate3d(-2%, 3%, 0); }
+  66%  { transform: translate3d(3%, 1%, 0); }
+  83%  { transform: translate3d(-1%, -2%, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes vignette-breathe {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1; }
+}
+
+@keyframes cue-travel {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(360%); }
+}
+
+@keyframes gilt-shimmer {
+  0%   { transform: translateX(-120%); }
+  100% { transform: translateX(220%); }
+}
+
+/* ============================================================
+   Reduced motion — everything resolves to its rest state.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .grain,
+  .vignette,
+  .cue-dot {
+    animation: none !important;
+  }
+
+  .cursor-ring,
+  .cursor-dot {
+    display: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
