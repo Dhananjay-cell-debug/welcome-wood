@@ -1,9 +1,8 @@
 import { forwardRef } from 'react'
 
 /**
- * The Welcome Woods mark — a W whose centre apex rises above its shoulders,
- * so the letter also reads as a treeline. Drawn as a single open stroke with
- * mitred joins, which is what gives it the sharp serif-adjacent points.
+ * Ring and inset disc from the supplied brand card. Vector geometry keeps
+ * the mark crisp at navigation and presentation sizes.
  *
  * `pathLength="100"` normalises the geometry so the draw-on animation can use
  * a plain 0–100 dashoffset regardless of the real path length.
@@ -30,13 +29,14 @@ const Monogram = forwardRef(function Monogram(
       <path
         ref={pathRef}
         pathLength="100"
-        d="M14 32 L32 76 L50 24 L68 76 L86 32"
+        d="M 50 5 A 43 43 0 1 1 50 91 A 43 43 0 1 1 50 5"
         stroke={stroke}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="miter"
         strokeMiterlimit="10"
       />
+      <circle cx="57" cy="66" r="25" fill={stroke} />
     </svg>
   )
 })

@@ -342,7 +342,7 @@ export default function Hero({ revealed }) {
             className="block text-cream/90 text-[9.5px] sm:text-[11px] tracking-rail pl-[0.42em] font-light"
             style={{ textShadow: '0 1px 12px rgba(24,14,7,0.6)' }}
           >
-            A PRIVATE COLLECTION OF RESIDENCES
+            INTERIORS. SPACES. EXPERIENCES.
           </span>
         </div>
 
@@ -373,27 +373,27 @@ export default function Hero({ revealed }) {
           className="mt-8 sm:mt-10 max-w-[34rem] text-cream text-[13.5px] sm:text-[15px] font-light leading-[1.85]"
           style={{ textShadow: '0 1px 16px rgba(24,14,7,0.6)' }}
         >
-          One home, photographed three times in a single day. We would rather
-          show you the light than describe it.
+          Thoughtful spaces, shaped around the way you live.
+          From the first idea to the finishing touch.
         </p>
 
         <div className="mt-11 sm:mt-14 flex flex-col sm:flex-row items-center gap-4 sm:gap-5">
           <a
-            href="#enquire"
+            href="#/projects"
             data-reveal="cta"
             className="group relative overflow-hidden px-9 py-[15px] bg-cream text-espresso text-[10.5px] tracking-wide2 font-normal transition-colors duration-500 hover:text-cream"
           >
-            <span className="relative z-10">REQUEST THE BROCHURE</span>
+            <span className="relative z-10">EXPLORE THE SPACES</span>
             {/* Fill sweeps up from the base on hover — transform only. */}
             <span className="absolute inset-0 bg-brown-deep origin-bottom scale-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-y-100" />
           </a>
 
           <a
-            href="#viewing"
+            href="#/contact"
             data-reveal="cta"
             className="group relative px-9 py-[15px] border border-cream/28 text-cream/85 text-[10.5px] tracking-wide2 font-light transition-colors duration-500 hover:border-cream/70 hover:text-cream"
           >
-            ARRANGE A VIEWING
+            START A PROJECT
           </a>
         </div>
       </div>

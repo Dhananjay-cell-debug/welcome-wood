@@ -18,11 +18,12 @@ import { scrollToTarget } from '../lib/useSmoothScroll'
  * dark plate inside an otherwise light section wins over its parent, so the
  * deepest matching element decides.
  */
-export default function Nav({ navMarkRef, revealed, menuOpen, onToggleMenu }) {
+export default function Nav({ navMarkRef, revealed, menuOpen, onToggleMenu, routePath = '/' }) {
   const rootRef = useRef(null)
   const paneRef = useRef(null)
   const [onBar, setOnBar] = useState(false)
-  const [theme, setTheme] = useState('dark') // 'dark' = bar sits on dark imagery
+  const [themeState, setThemeState] = useState({ path: routePath, value: routePath === '/' ? 'dark' : 'light' })
+  const theme = themeState.path === routePath ? themeState.value : routePath === '/' ? 'dark' : 'light'
 
   useEffect(() => {
     if (!revealed) return
@@ -76,7 +77,7 @@ export default function Nav({ navMarkRef, revealed, menuOpen, onToggleMenu }) {
           best = el
         }
       }
-      if (best) setTheme(best.dataset.navTheme)
+      if (best) setThemeState({ path: routePath, value: best.dataset.navTheme })
     }
 
     const triggers = els.map((el) =>
@@ -93,10 +94,10 @@ export default function Nav({ navMarkRef, revealed, menuOpen, onToggleMenu }) {
 
     ScrollTrigger.refresh()
     return () => triggers.forEach((t) => t.kill())
-  }, [revealed])
+  }, [revealed, routePath])
 
   useEffect(() => {
-    const target = onBar && !menuOpen ? 1 : 0
+    const target = (onBar || routePath !== '/') && !menuOpen ? 1 : 0
     if (prefersReducedMotion()) {
       gsap.set(paneRef.current, { opacity: target })
       return
@@ -107,7 +108,7 @@ export default function Nav({ navMarkRef, revealed, menuOpen, onToggleMenu }) {
       ease: 'power2.out',
       overwrite: 'auto',
     })
-  }, [onBar, menuOpen])
+  }, [onBar, menuOpen, routePath])
 
   // The menu panel is beige, so the type must read dark while it is open.
   const light = menuOpen || theme === 'light'
@@ -126,6 +127,7 @@ export default function Nav({ navMarkRef, revealed, menuOpen, onToggleMenu }) {
     : { filter: 'drop-shadow(0 1px 10px rgba(24,14,7,0.7))' }
 
   const onHome = (e) => {
+    if (routePath !== '/') return
     e.preventDefault()
     scrollToTarget('#top')
   }
@@ -181,32 +183,40 @@ export default function Nav({ navMarkRef, revealed, menuOpen, onToggleMenu }) {
       >
         <div className="flex items-center justify-between">
           <a
-            href="#top"
+            href="#/"
             onClick={onHome}
-            className="pointer-events-auto block"
+            className="pointer-events-auto ww-nav-wordmark"
             aria-label="Welcome Woods — home"
           >
             <Monogram
               ref={navMarkRef}
-              className={`w-[32px] h-[32px] sm:w-[36px] sm:h-[36px] opacity-0 transition-colors duration-500 ${ink}`}
-              strokeWidth={6}
+              className={`w-[32px] h-[32px] sm:w-[36px] sm:h-[36px] ${revealed ? '' : 'opacity-0'} transition-colors duration-500 ${ink}`}
+              strokeWidth={3}
               style={markShadow}
             />
+            <span className={`${ink} transition-colors duration-500`} style={shadow}>WELCOME WOODS</span>
           </a>
 
           <div
             data-nav-item
-            className={`hidden sm:block font-mark text-[13px] tracking-rail pl-[0.42em] opacity-0 select-none transition-colors duration-500 ${ink}`}
+            className={`hidden xl:block text-[8px] tracking-wide3 opacity-0 select-none transition-colors duration-500 ${ink}`}
             style={shadow}
           >
-            WELCOME WOODS
+            INTERIORS · SPACES · EXPERIENCES
           </div>
 
+          <div className="ww-nav-actions">
+          <nav className={`ww-nav-links ${ink}`} aria-label="Quick navigation">
+            <a href="#/studio" aria-current={routePath === '/studio' ? 'page' : undefined}>Studio</a>
+            <a href="#/projects" aria-current={routePath.startsWith('/projects') ? 'page' : undefined}>Projects</a>
+            <a href="#/contact" aria-current={routePath === '/contact' ? 'page' : undefined}>Let’s talk ↗</a>
+          </nav>
           <button
             data-nav-item
             type="button"
             onClick={onToggleMenu}
             aria-expanded={menuOpen}
+            aria-controls="site-menu"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             className="pointer-events-auto group flex items-center gap-3.5 opacity-0"
           >
@@ -231,6 +241,7 @@ export default function Nav({ navMarkRef, revealed, menuOpen, onToggleMenu }) {
               />
             </span>
           </button>
+          </div>
         </div>
       </header>
     </>
