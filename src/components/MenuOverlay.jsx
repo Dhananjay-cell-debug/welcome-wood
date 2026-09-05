@@ -14,14 +14,17 @@ export default function MenuOverlay({ open, onClose, routePath }) {
     const overflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     getLenis()?.stop();
-    closeButton.current?.focus();
+    const focusFrame = requestAnimationFrame(() => closeButton.current?.focus());
     const onKey = (e) => {
       if (e.key === "Escape") onClose();
       if (e.key !== "Tab") return;
       const els = [...root.current.querySelectorAll("a[href], button")];
       const first = els[0],
         last = els[els.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
+      if (!root.current.contains(document.activeElement)) {
+        e.preventDefault();
+        closeButton.current?.focus();
+      } else if (e.shiftKey && document.activeElement === first) {
         e.preventDefault();
         last.focus();
       } else if (!e.shiftKey && document.activeElement === last) {
@@ -31,6 +34,7 @@ export default function MenuOverlay({ open, onClose, routePath }) {
     };
     window.addEventListener("keydown", onKey);
     return () => {
+      cancelAnimationFrame(focusFrame);
       document.body.style.overflow = overflow;
       getLenis()?.start();
       window.removeEventListener("keydown", onKey);
