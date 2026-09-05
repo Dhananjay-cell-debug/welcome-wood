@@ -316,7 +316,7 @@ export default function Hero({ revealed }) {
         className="absolute inset-0 z-10 pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse 46% 34% at 50% 45%, rgba(28,17,9,0.56) 0%, rgba(28,17,9,0.34) 45%, rgba(28,17,9,0.10) 72%, rgba(28,17,9,0) 100%)',
+            'radial-gradient(ellipse 85% 60% at 50% 44%, rgba(28,17,9,0.68) 0%, rgba(28,17,9,0.46) 45%, rgba(28,17,9,0.16) 72%, rgba(28,17,9,0) 100%)',
         }}
       />
       {/* Warm cast, now a whisper. Every stop carries an explicit colour: the
@@ -353,7 +353,7 @@ export default function Hero({ revealed }) {
           <span className="mask-line">
             <span
               data-reveal="line"
-              className="block text-[clamp(1.95rem,min(7.8vw,10.5vh),6.6rem)]"
+              className="block text-[clamp(2.2rem,min(7.8vw,10.5vh),6.6rem)]"
             >
               Quietly made.
             </span>
@@ -361,7 +361,7 @@ export default function Hero({ revealed }) {
           <span className="mask-line">
             <span
               data-reveal="line"
-              className="block italic text-[clamp(1.95rem,min(7.8vw,10.5vh),6.6rem)] text-sand"
+              className="block italic text-[clamp(2.2rem,min(7.8vw,10.5vh),6.6rem)] text-[#E4CCA5]"
             >
               Exceptionally finished.
             </span>
@@ -370,7 +370,7 @@ export default function Hero({ revealed }) {
 
         <p
           data-reveal="sub"
-          className="mt-8 sm:mt-10 max-w-[34rem] text-cream text-[13.5px] sm:text-[15px] font-light leading-[1.85]"
+          className="mt-8 sm:mt-10 max-w-[34rem] text-cream text-[16px] sm:text-[17px] font-normal leading-[1.85]"
           style={{ textShadow: '0 1px 16px rgba(24,14,7,0.6)' }}
         >
           Thoughtful spaces, shaped around the way you live.
@@ -404,7 +404,7 @@ export default function Hero({ revealed }) {
         className="hidden lg:block absolute z-30 left-[calc(var(--frame-inset)+22px)] top-1/2 -translate-y-1/2 opacity-0"
       >
         <span
-          className="block text-cream/45 text-[9.5px] tracking-rail font-light whitespace-nowrap"
+          className="block text-cream/75 text-[11px] tracking-rail font-light whitespace-nowrap"
           style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
         >
           WELCOME&nbsp;&nbsp;WOODS
@@ -416,7 +416,7 @@ export default function Hero({ revealed }) {
         className="hidden lg:block absolute z-30 right-[calc(var(--frame-inset)+22px)] top-1/2 -translate-y-1/2 opacity-0"
       >
         <span
-          className="block text-cream/35 text-[9.5px] tracking-wide2 font-light whitespace-nowrap"
+          className="block text-cream/75 text-[11px] tracking-wide2 font-light whitespace-nowrap"
           style={{ writingMode: 'vertical-rl' }}
         >
           CONCEPT PRESENTATION · PLACEHOLDER IMAGERY
@@ -428,7 +428,7 @@ export default function Hero({ revealed }) {
         data-reveal="furniture"
         className="absolute z-30 bottom-[calc(var(--frame-inset)+30px)] left-1/2 -translate-x-1/2 lg:left-[calc(var(--frame-inset)+34px)] lg:translate-x-0 flex flex-col items-center gap-3 opacity-0"
       >
-        <span className="text-cream/40 text-[9px] tracking-wide2 font-light hidden lg:block">
+        <span className="text-cream/75 text-[11px] tracking-wide2 font-light hidden lg:block">
           SCROLL
         </span>
         <div className="cue-track">

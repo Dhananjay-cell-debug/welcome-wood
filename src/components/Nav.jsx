@@ -174,6 +174,8 @@ export default function Nav({ navMarkRef, revealed, menuOpen, onToggleMenu, rout
 
       <header
         ref={rootRef}
+        inert={menuOpen}
+        aria-hidden={menuOpen}
         className="fixed z-50 pointer-events-none"
         style={{
           top: 'calc(var(--frame-inset) + 18px)',

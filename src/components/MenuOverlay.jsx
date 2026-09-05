@@ -10,7 +10,7 @@ export default function MenuOverlay({ open, onClose, routePath }) {
   const closeButton = useRef(null);
   useEffect(() => {
     if (!open) return;
-    const before = document.activeElement;
+    const before = document.querySelector('header button[aria-controls="site-menu"]') || document.activeElement;
     const overflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     getLenis()?.stop();
